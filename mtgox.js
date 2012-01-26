@@ -3,7 +3,7 @@ var fs = require('fs');
 var events = require('events');
 var io = require('socket.io-client');
 
-var MTGOX_WEBSOCKET_URL = 'https://socketio.mtgox.com/mtgox';
+var MTGOX_SOCKET_URL = 'https://socketio.mtgox.com/mtgox';
 var MTGOX_CHANNELS = [];
 
 try {
@@ -26,21 +26,14 @@ var getChannel = function(key) {
 var MtGoxClient = function() {
   events.EventEmitter.call(this);
   var self = this;
-  var socket = io.connect(MTGOX_WEBSOCKET_URL);
-
-  var emitChannelMessage = function(message) {
-    var channel = getChannel(message.channel);
-    if (channel) {
-      self.emit(channel.private, message);
-    }
-  };
+  var socket = io.connect(MTGOX_SOCKET_URL);
 
   socket.on('message', function(raw) {
     // Emit raw data
     var data = raw;
     self.emit('data', data);
 
-    // Emit JSON messages
+    // Emit messages
       var message = data;
       self.emit('message', message);
 
@@ -53,29 +46,29 @@ var MtGoxClient = function() {
       }
 
       if (message.op == 'private') {
-        emitChannelMessage(message);
+        self.emit(message.private, message);
       }
   });
 
-  socket.onerror = function(error) {
+  socket.on('error', function(error) {
     util.debug(error);
     self.emit('error', error);
-  };
+  });
 
-  socket.onopen = function() {
+  socket.on('open', function() {
     self.emit('open');
-  };
+  });
 
-  socket.onclose = function() {
+  socket.on('close', function() {
     self.emit('close');
-  }
+  });
 
   self.subscribe = function(channel) {
     var message = {
       "op": "subscribe",
       "channel": channel
     };
-    socket.send(JSON.stringify(message));
+    socket.send(message);
   };
 
   self.unsubscribe = function(channel) {
@@ -87,7 +80,6 @@ var MtGoxClient = function() {
   };
 
   self.close = function(timeout) {
-    socket.close(timeout);
   };
 
   // Allow access to underlying socket
@@ -98,7 +90,7 @@ util.inherits(MtGoxClient, events.EventEmitter);
 
 exports.MtGoxClient = MtGoxClient;
 exports.CHANNELS = MTGOX_CHANNELS;
-exports.URL = MTGOX_WEBSOCKET_URL;
+exports.URL = MTGOX_SOCKET_URL;
 exports.getChannel = getChannel;
 
 exports.connect = function() {
