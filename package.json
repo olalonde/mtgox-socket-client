@@ -1,0 +1,22 @@
+{
+    "name": "mtgox-socket-client",
+    "version": "0.0.1",
+    "description": "A Socket.io client for MtGox",
+    "keywords": ["mtgox", "socket.io", "bitcoin"],
+    "homepage": "http://github.com/olalonde/node-socket-client",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/dlanod/node-socket-client"
+    },
+    "author": "Donald Ness <donald.ness@gmail.com>",
+    "contributors": [{ "name": "Olivier Lalonde", "email": "olalonde@gmail.com" }]
+    "main": "./mtgox.js",
+    "engines": {
+        "node": ">= v0.4.12"
+    },
+    "dependencies": {
+        "socket.io-client": "0.8.7"
+        "colors": "0.5.1",
+        "datetime": "0.0.3"
+    }
+}
