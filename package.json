@@ -15,7 +15,7 @@
         "node": ">= v0.4.12"
     },
     "dependencies": {
-        "socket.io-client": "0.8.7",
+        "socket.io-client": "https://github.com/kazuyukitanimura/socket.io-client/tarball/master",
         "colors": "0.5.1",
         "datetime": "0.0.3"
     }

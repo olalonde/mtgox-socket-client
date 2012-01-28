@@ -7,7 +7,7 @@ var MTGOX_SOCKET_URL = 'https://socketio.mtgox.com/mtgox';
 var MTGOX_CHANNELS = [];
 
 try {
-  var config = JSON.parse(fs.readFileSync('./config.json'));
+  var config = JSON.parse(fs.readFileSync(__dirname + '/config.json'));
   if (Array.isArray(config.channels)) {
     MTGOX_CHANNELS = config.channels;
   }
