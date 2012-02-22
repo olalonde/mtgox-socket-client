@@ -1,6 +1,6 @@
 {
     "name": "mtgox-socket-client",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "A Socket.io client for MtGox",
     "keywords": ["mtgox", "socket.io", "bitcoin"],
     "homepage": "http://github.com/olalonde/node-socket-client",
