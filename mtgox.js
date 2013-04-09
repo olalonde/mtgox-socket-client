@@ -55,8 +55,8 @@ var MtGoxClient = function() {
     self.emit('error', error);
   });
 
-  socket.on('open', function() {
-    self.emit('open');
+  socket.on('connect', function() {
+    self.emit('connect');
   });
 
   socket.on('close', function() {
