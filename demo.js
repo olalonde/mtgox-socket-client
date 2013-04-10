@@ -8,7 +8,7 @@ var lastTickerPrice = -1;
 var lastTickerVolume = -1;
 var client = mtgox.connect();
 
-client.on('open', function() {
+client.on('connect', function() {
   // Good place to unsubscribe from unwanted channels
   // client.unsubscribe(mtgox.getChannel('trade').key);
   // client.unsubscribe(mtgox.getChannel('depth').key);
@@ -73,12 +73,12 @@ var getDepthFormat = function(depth) {
   }
   else {
     format += '- '.grey;
-  };
+  }
 
   if (depth.type_str == 'ask') {
     format += 'Ask: '.grey.bold;
   }
-  else if (depth.type_str = 'bid') {
+  else if (depth.type_str == 'bid') {
     format += 'Bid: '.grey.bold;
   }
 
@@ -93,7 +93,7 @@ var getDepthFormat = function(depth) {
 
 var getTickerFormat = function(ticker, lastPrice) {
   var format = '> ';
-  
+
   var last = 'Last: '.bold;
   var high = 'High: '.bold;
   var low = 'Low: '.bold;
