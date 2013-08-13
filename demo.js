@@ -112,7 +112,6 @@ var getTickerFormat = function(ticker, lastPrice) {
 };
 
 var getTradeFormat = function(trade, lastPrice) {
-  console.log("Getting tarde format", trade)
   var format = '$ ';
 
   if (trade.trade_type == 'ask') {
