@@ -16,7 +16,7 @@ Example Use
 ------------
 
 ```javascript
-var MtGoxClient = require('./lib/mtgox-client').MtGoxClient;
+var MtGoxClient = require('mtgox-client').MtGoxClient;
 
 var client = new MtGoxClient({channels: {client: true, trade: true}});
 
@@ -35,7 +35,6 @@ client.on("other",function(message) {
 Contributors
 ------------
 
-* [johnwarden](https://github.com/johnwarden)
 * [olalonde](https://github.com/olalonde)
 * [dlanod](https://github.com/dlanod)
 * [cronopio](https://github.com/cronopio)
@@ -44,7 +43,7 @@ Contributors
 License
 -------
 
-Copyright 2011 Donald Ness, Olivier Lalonde
+Copyright 2011 Donald Ness, Olivier Lalonde, Jonathan Warden
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
