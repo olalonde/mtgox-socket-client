@@ -1,12 +1,12 @@
 var util = require('util');
 var colors = require('colors');
 var datetime = require('datetime');
-var mtgox = require('./mtgox');
+var MtGoxClient = require('./mtgox').MtGoxClient
 
 var lastTradePrice = -1;
 var lastTickerPrice = -1;
 var lastTickerVolume = -1;
-var client = mtgox.connect();
+var client = new MtGoxClient();
 
 client.on('connect', function() {
   // Good place to unsubscribe from unwanted channels
@@ -23,19 +23,19 @@ client.on('unsubscribe', function(message) {
   renderUnsubscribeMessage(message);
 });
 
-client.on('trade', function(message) {
-  renderTradeMessage(message, lastTradePrice);
-  lastTradePrice = message.trade.price;
+client.on('trade', function(trade) {
+  renderTradeMessage(trade, lastTradePrice);
+  lastTradePrice = trade.price;
 });
 
-client.on('depth', function(message) {
-  renderDepthMessage(message);
+client.on('depth', function(depth) {
+  renderDepthMessage(depth);
 });
 
-client.on('ticker', function(message) {
-  renderTickerMessage(message, lastTickerPrice);
-  lastTickerPrice = message.ticker.last;
-  lastTickerVolume = message.ticker.vol;
+client.on('ticker', function(ticker) {
+  renderTickerMessage(ticker, lastTickerPrice);
+  lastTickerPrice = ticker.last;
+  lastTickerVolume = ticker.vol;
 });
 
 process.on('exit', function() {
@@ -53,21 +53,21 @@ var renderUnsubscribeMessage = function(message) {
   console.log(getTimeFormat(), format, getChannelFormat(message));
 };
 
-var renderTradeMessage = function(message, lastPrice) {
-  console.log(getTimeFormat(), getTradeFormat(message.trade, lastPrice));
+var renderTradeMessage = function(trade, lastPrice) {
+  console.log(getTimeFormat(), getTradeFormat(trade, lastPrice));
 };
 
-var renderTickerMessage = function(message, lastPrice) {
-  console.log(getTimeFormat(), getTickerFormat(message.ticker, lastPrice));
+var renderTickerMessage = function(ticker, lastPrice) {
+  console.log(getTimeFormat(), getTickerFormat(ticker, lastPrice));
 };
 
-var renderDepthMessage = function(message) {
-  console.log(getTimeFormat(), getDepthFormat(message.depth));
+var renderDepthMessage = function(depth) {
+  console.log(getTimeFormat(), getDepthFormat(depth));
 };
 
 var getDepthFormat = function(depth) {
   var format = '';
-
+  
   if (depth.volume < 0) {
     format += '+ '.grey;
   }
@@ -92,6 +92,8 @@ var getDepthFormat = function(depth) {
 };
 
 var getTickerFormat = function(ticker, lastPrice) {
+
+
   var format = '> ';
 
   var last = 'Last: '.bold;
@@ -110,6 +112,7 @@ var getTickerFormat = function(ticker, lastPrice) {
 };
 
 var getTradeFormat = function(trade, lastPrice) {
+  console.log("Getting tarde format", trade)
   var format = '$ ';
 
   if (trade.trade_type == 'ask') {
