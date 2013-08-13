@@ -8,30 +8,28 @@ Installation
 
 $ npm install mtgox-socket-client
 
-You may also need to put your API keys inside of 'keys.js' if you want to access the 'client' channel (e.g. your personal trades).
-
 $ node demo.js
+
+You may also need to put your API keys inside of 'keys.js' if you want to access the 'client' channel (e.g. your personal trades).
 
 Example Use
 ------------
 
-	var MtGoxClient = require('./lib/mtgox-client').MtGoxClient;
+```javascript
+var MtGoxClient = require('./lib/mtgox-client').MtGoxClient;
 
-	var client = new MtGoxClient({channels: {client: true, trade: true}});
+var client = new MtGoxClient({channels: {client: true, trade: true}});
 
-	function showMessage(message) {
-		console.log("Got message from mt!",message);
-	}
+/* Show the trade message every time someone makes a trade */
+client.on("trade",function(message) {
+	console.log("Got trade message from mtgox!",message);	
+});
 
-	/* Show the trade message every time someone makes a trade */
-	client.on("trade",function(message) {
-		console.log("Got trade message from mtgox!",message);	
-	});
-
-	/* Show the trade message every there is a client-specific action (buy, sell, etc) */
-	client.on("other",function(message) {
-		console.log("Got client-specific message from mtgox!",message);	
-	});
+/* Show the trade message every there is a client-specific action (buy, sell, etc) */
+client.on("other",function(message) {
+	console.log("Got client-specific message from mtgox!",message);	
+});
+```
 
 
 Contributors
