@@ -20,7 +20,7 @@ var MTGOX_CHANNELS = [
 
 var getChannel = function(key) {
   return MTGOX_CHANNELS.filter(function(channel) {
-    return (channel.key == key || channel.private == key || channel.key == key);
+    return (channel.key == key || channel.private == key);
   })[0];
 };
 
@@ -55,16 +55,12 @@ var MtGoxClient = function(options) {
 		socket.on('message', function(raw) {
 			lastPulse = new Date() / 1E3;
 
-			// Emit raw data
 			var data = raw;
 
-			// Emit messages
 			var message = data;
-
 
 			if (message.op == 'remark') {
 				 console.info("Remark",message);
-				 console.info("Debug",message.debug);
 			}
 			else if (message.op == 'subscribe') {
 				console.info("Got subscribe confirmation",getChannel(message.channel).name);
@@ -109,11 +105,11 @@ var MtGoxClient = function(options) {
 		});
 
 		socket.on('connect', function() {
-			console.info("Got connect");
+			console.info("Successfully connected");
 
 			if(options.channels) {
 				if(options.channels.client) {
-					console.info("Subscribing to client");
+					console.info("subscribing to private client data");
 					self.subscribePrivate();
 				}
 				if(!options.channels.trades) {
@@ -125,7 +121,6 @@ var MtGoxClient = function(options) {
 					self.unsubscribe(getChannel('depth').key)
 				}
 			}
-
 
 		});
 
@@ -140,7 +135,7 @@ var MtGoxClient = function(options) {
 
 
 		socket.on('close', function() {
-			console.info("Got close");
+			console.info("Got socket close");
 		});
 
 		function reSubscribe() {
@@ -215,10 +210,10 @@ var MtGoxClient = function(options) {
 	function checkPulse() {
 		var now = new Date() / 1E3;
 		if((now - lastPulse) > 30) {
-			console.info("checking pulse: " + Math.round((now - lastPulse)*100)/100);
+			console.info("No activity on socket for " + (Math.round((now - lastPulse)*100)/100) + "s");
 		}
 		if (now - lastPulse > threshhold) {
-			console.info("More than " + threshhold + "s since last data.  Reopening socket.")
+			console.info("More than " + threshhold + "s since last activity.  Destroying and re-creating socket.")
 			reopenSocket();
 		}
 	}
@@ -228,4 +223,6 @@ util.inherits(MtGoxClient, EventEmitter);
 
 exports.MtGoxClient = MtGoxClient;
 
-
+exports.connect = function() {
+	return new MtGoxClient();
+}
