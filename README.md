@@ -8,9 +8,34 @@ Installation
 
 $ npm install mtgox-socket-client
 
+$ node demo.js
+
+You may also need to put your API keys inside of 'keys.js' if you want to access the 'client' channel (e.g. your personal trades).
+
+Example Use
+------------
+
+```javascript
+var MtGoxClient = require('mtgox-client').MtGoxClient;
+
+var client = new MtGoxClient({channels: {client: true, trade: true}});
+
+/* Show the trade message every time someone makes a trade */
+client.on("trade",function(message) {
+	console.log("Got trade message from mtgox!",message);	
+});
+
+/* Show the trade message every there is a client-specific action (buy, sell, etc) */
+client.on("other",function(message) {
+	console.log("Got client-specific message from mtgox!",message);	
+});
+```
+
+
 Contributors
 ------------
 
+* [olalonde](https://github.com/olalonde)
 * [dlanod](https://github.com/dlanod)
 * [cronopio](https://github.com/cronopio)
 * [marak](https://github.com/marak)
@@ -18,7 +43,7 @@ Contributors
 License
 -------
 
-Copyright 2011 Donald Ness, Olivier Lalonde
+Copyright 2011 Donald Ness, Olivier Lalonde, Jonathan Warden
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
